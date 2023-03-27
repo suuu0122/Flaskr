@@ -1,0 +1,21 @@
+<!-- extends 'base.html' は、このテンプレートが'base.html'のテンプレートから
+     ブロックを置き換えるものであるということをJinjaへ伝える. -->
+{% extends 'base.html' %}
+
+<!-- block title を block header の内側に置くのは、ウィンドウとページが同じタイトル
+     を2回書くことなく共有できるように、タイトルのブロックを設定し、それからそのタイトル
+	 の値をヘッダのブロックに出力する. -->
+{% block header %}
+	<h1>{% block title %}Register{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+	<form method="post">
+		<label for="username">Username</label>
+		<!-- requrired属性は、それらの入力欄が記入されないうちは、formを提出（submit）しないようにする. -->
+		<input name="username" id="username" required>
+		<label for="password">Password</label>
+		<input type="password" name="password" id="password" required>
+		<input type="submit" valude="Register">
+	</form>
+{% endblock %}

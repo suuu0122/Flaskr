@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- block title は、ブラウザのタブおよびウィンドウのタイトルで表示されるタイトルを変更する. -->
+<title>{% block title %}{% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<nav>
+	<h1>Flaskr</h1>
+	<ul>
+		<!-- gは自動的にテンプレートで利用可能.
+		　　  g.userがload_logged_in_user()で設定されるかに基づいて、ユーザ名とログアウトのリンクが表示されるか、
+             または登録とログインへのリンクが表示される.
+			 url_for()も自動的に利用可能となる.
+		-->
+		{% if g.user %}
+			<li><span>{{ g.user['usrname'] }}</span></li>
+			<li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+		{% else %}
+			<li><a href="{{ url_for('auth.register') }}">Register</a></li>
+			<li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+		{% endif %}
+	</ul>
+</nav>
+<section class="content">
+	<header>
+		<!-- block header は、ページ上に表示されるタイトルを変更する. -->
+		{% block header %}{% endblock %}
+	</header>
+	{% for message in get_flashed_messages() %}
+		<div class="flash">{{ message }}</div>
+	{% endfor %}
+	<!-- block content は、ログインformやブログの投稿記事など、各ページのコンテンツが表示される. -->
+	{% block content %}{% endblock %}
+</section>
