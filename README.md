@@ -1,5 +1,23 @@
 # Flaskr
 
+## Index
+* [Flaskとは](#about-Flask)
+* [`__init__.py`とは](#about-init.py)
+* [SQLite](#SQLite)
+* [SQLインジェクション](#sql-injection)
+* [CookieとSession](#cookie-and-session)
+* [デコレータ](#decorator)
+* [エンドポイントとURL](#endpoint-and-url)
+* [テンプレート](#template)
+* [Jinja](#jinja)
+* [静的ファイル](#static-file)
+* [プロジェクトをインストール可能にする](#can-install-project)
+* [プロジェクトのインストール](#install-project)
+* [Reference](#reference)
+<br />
+
+<a id="about-Flask"></a>
+
 ## [Flaskとは](https://aiacademy.jp/media/?p=57)
 * Flaskは、PythonのWebアプリケーションフレームワークの1つ.
 * 小規模向けの簡単なWebアプリケーションを作成するのに適している.
@@ -29,6 +47,8 @@
 	* チュートリアルを進める時は、Flaskを実行させたままにしながら、ブラウザのページを再読み込みするだけでよい.
 	* アプリケーションをストップさせるには、`Ctrl + C`を押す.
 <br />
+
+<a id="about-init.py"></a>
 
 ## [`__init__.py`とは](https://qiita.com/msi/items/d91ea3900373ff8b09d7)
 * [モジュールとパッケージ](https://rinatz.github.io/python-book/ch04-02-packages/)
@@ -76,6 +96,8 @@
 	* ファイルとして存在するモジュールのクラス（名前空間）では、`__init__()`を記載する場所があるが、ディレクトリとして存在する名前空間には`__init__()`を書く場所がないため、その代わりとして`__init__.py`というファイルを作成するようにした.
 	* `__init__.py`は、ディレクトリ名をモジュール名としてマッピングするためのファイルと言える.
 <br />
+
+<a id="SQLite"></a>
 
 ## SQLite
 * [SQLiteとは](https://products.sint.co.jp/topsic/blog/sqlite)
@@ -215,6 +237,8 @@
 		```
 <br />
 
+<a id="sql-injection"></a>
+
 ## [SQLインジェクション](https://www.softbanktech.co.jp/special/blog/it-keyword/2021/0020/)
 * SQLインジェクションとは
 	* SQLインジェクションとは、SQLのデータベースに不正なプログラムを注入、挿入するサーバ攻撃の総称.
@@ -237,6 +261,8 @@
 	* セキュリティソフトを導入する.
 * [python-sqlite3でのエスケープ処理](https://petitviolet.hatenablog.com/entry/20120531/1338429793)
 <br />
+
+<a id="cookie-and-session"></a>
 
 ## [CookieとSession](https://www.engilaboo.com/definitely-understand-cookie-session/)
 * Cookieとは
@@ -261,6 +287,8 @@
 	* ユーザは次の商品を買い物カゴに入れるために、ショッピングサイトのサーバにリクエストを送信（このとき、Cookieに紐付いているサーバ情報をもとに、先ほどCookieにセットしたSessionIDが自動的にサーバに送信される）.
 	* サーバはSessionIDにより「誰からの通信か」を認識した上で、選択された商品をSessionIDと紐付けてサーバ側のデータベースに保存（Session情報はデータベースだけでなく場所に保存可能）.
 <br />
+
+<a id="decorator"></a>
 
 ## [デコレータ](https://qiita.com/mtb_beta/items/d257519b018b8cd0cc2e)
 * デコレータとは
@@ -294,6 +322,8 @@
 	* `**kwargs`: 複数のキーワード引数を辞書として受け取る.
 <br />
 
+<a id="endpoint-and-url">
+
 ## [エンドポイントとURL](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/views.html)
 * `url_for()`は、viewの名前と引数に基づいて対応するURLを生成する.
 * viewに関連付けられた名前は **エンドポイント** とも呼ばれ、標準設定ではviewの関数の名前と同じになる.
@@ -306,6 +336,8 @@
 * blueprintを使用する時は、blueprintの名前が関数名の前に付けられるので、`login()`のエンドポイントは、blueprintの`'auth'`に`login()`関数を追加しているため`'auth.login'`になる.
 <br />
 
+<a id="template"></a>
+
 ## [テンプレート](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/templates.html)
 * テンプレートファイルは、flaskrパッケージ内のtemplatesディレクトリに格納する.
 * テンプレートファイルとは、静的データと動的データのためのプレースホルダを含んでいるファイルである.
@@ -316,6 +348,8 @@
 * ベースのテンプレートは、templatesディレクトリに直接置かれるが、blueprintのテンプレートは、templates下のblueprintと同じ名前のディレクトリに置かれる.
 <br />
 
+<a id="jinja"></a>
+
 ## [Jinja](https://shigeblog221.com/python-flask3/)
 * Jinjaは、python用テンプレートエンジンの1つ.
 * テンプレートエンジンは、ユーザの操作に合わせて、HTMLの内容を部分的に適した内容に書き換える仕組みで、テンプレートと呼ばれる雛形と、あるデータモデルで表現される入力データを合成し、ドキュメントを出力するソフトウェアである.
@@ -323,11 +357,15 @@
 * [jinjaの使い方](https://www.sukerou.com/2019/04/jinja2flaskjinja2.html)
 <br />
 
+<a id="static-file">
+
 ## [静的ファイル](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/static.html)
 * HTMLレイアウトにスタイルを加えるために、CSSを追加することができる. スタイルは変化しないので、テンプレートファイルではなく、静的（static）ファイルになる.
 * Flaskは、flaskr/staticディレクトリからの相対パスに対応するファイルのviewを自動的に追加する.
 * CSSに加えて、他の種類の静的ファイルにロゴ画像やJavaScript関数のファイルがある場合、それらはすべてflaskr/staticディレクトリの下に置き、`url_for('staic', filename='...')`により参照できる.
 <br />
+
+<a id="can-install-project"></a>
 
 ## [プロジェクトをインストール可能にする](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/install.html)
 * プロジェクトをインストール可能にするということは、配布用（distribution）ファイルを作成でき、このプロジェクトの環境へFlaskをインストールしたときのように、その配布用ファイルを他の環境へインストールできることを意味する.
@@ -442,6 +480,8 @@
 	* [ソースコード配布物を作成する](https://docs.python.org/ja/3/distutils/sourcedist.html)
 <br />
 
+<a id="install-project"></a>
+
 ## [プロジェクトのインストール](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/install.html)
 * プロジェクトをインストールするには下記コマンドを実行する.
 	```
@@ -450,6 +490,8 @@
 	* このコマンドは、pipにカレントディレクトリからsetup.pyを見つけ出し、それを編集可能（editable）または開発（development）モードでインストールするように伝える.
 	* 編集可能モードは、ローカルのコードを変更した時に、プロジェクトの依存対象のような、プロジェクトに関するメタデータを変更した場合だけ再インストールが必要なようにする.
 <br />
+
+<a id="reference"></a>
 
 ## Reference
 * [Tutorial](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/index.html)
