@@ -329,5 +329,127 @@
 * CSSに加えて、他の種類の静的ファイルにロゴ画像やJavaScript関数のファイルがある場合、それらはすべてflaskr/staticディレクトリの下に置き、`url_for('staic', filename='...')`により参照できる.
 <br />
 
+## [プロジェクトをインストール可能にする](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/install.html)
+* プロジェクトをインストール可能にするということは、配布用（distribution）ファイルを作成でき、このプロジェクトの環境へFlaskをインストールしたときのように、その配布用ファイルを他の環境へインストールできることを意味する.
+* `setup.py`ファイル
+	```python
+	from setuptools import find_packages, setup
+
+	setup(
+		name='flaskr',
+		version='1.0.0',
+		packages=find_packages(),
+		include_package_data=True,
+		zip_safe=False,
+		install_requires=[
+			'flask',
+		],
+	)
+	```
+		* プロジェクトと、プロジェクトに所属するファイルを記述する.
+		* `packages`は、どのpackageディレクトリ（およびそれが含んでいるPythonファイル）を含めるべきかをPythonに伝える.
+		* `find_packages()`は、packageディレクトリを全て手入力せずに済むように、packageディレクトリを自動的に見つけ出す.
+		* staticやtemplatesディレクトリのような、（Pythonのpackageではない）その他のファイルを含めるには、`include_package_data`を設定する. そのようなその他のデータが何かを伝えるためには、Pythonは`MANIFEST.in`というもう一つのファイルを必要とする.
+* `MANIFEST.in`ファイル
+	```
+	include flaskr/schema.sql
+	graft flaskr/static
+	graft flaskr/templates
+	global-exclude *.pyc
+	```
+	* Pythonに、staticとtemplatesディレクトリにあるすべてと、schema.sqlファイルはコピーし、バイトコードのファイル（訳注：Pythonが実行時に作成・使用する中間ファイル）は除外するように伝える.
+* [setup.pyとは](https://qiita.com/Tadahiro_Yamamura/items/2cbcd272a96bb3761cc8)
+	* Pythonをインストールする際に標準で付属する`pip`を使用して、コードを他人と共有できる（特別な準備が不要）.
+	* コードの共有方法
+		```zsh
+		pip install foopackage
+		```
+		* 上記コマンドを打ち込むだけで、依存関係も含めた環境を簡単に構築できる.
+		* 上記のようにインストールしたパッケージは、コードに下記のように記述することでどこからでも参照できる.
+			```python
+			from foopackage.barmodule import hogehoge
+			```
+	* `setup.py`の例
+		```python
+		rom setuptools import setup
+
+		setup(
+			name="パッケージの名前",
+			version="パッケージのバージョン(例:1.0.0)",
+			install_requires=["packageA", "packageB"],
+			extras_require={
+				"develop": ["dev-packageA", "dev-packageB"]
+			},
+			entry_points={
+				"console_scripts": [
+					"foo = package_name.module_name:func_name",
+					"foo_dev = package_name.module_name:func_name [develop]"
+				],
+				"gui_scripts": [
+					"bar = gui_package_name.gui_module_name:gui_func_name"
+				]
+			}
+		)
+		```
+		* 設定内容は、すべて`setup()`の引数として記述する.
+		* `install_requires`で指定されたパッケージは、`pip install -e .`した時に一緒にインストールされる.
+		* `extra_requires`で指定されたパッケージは、`pip install -e . [develop]`などと指定することでインストールされる.
+		* `entry_points`に指定された関数は、`pip install`した時に実行可能ファイルとして生成される.
+	* `setup.cfg`の利用
+		* `setup.py`での設定項目が増えた場合には読みにくくなるので、`setup.py`と同じディレクトリに`setup.cfg`という設定ファイルを作成する方がよい.
+	* `setup.cfg`を使用した`setup.py`の記述方法
+		* `setup.py`
+			```python
+			from setuptools import setup
+
+			setup()
+			```
+		* `setup.cfg`
+			```
+			# metadataセクションではパッケージのメタデータを定義する
+			# これらの値はpypiで公開した際に表示される。
+			# なおversion等、一部のキーはディレクティブの指定により外部ファイルから値を取得することができる
+			# https://setuptools.readthedocs.io/en/latest/setuptools.html#metadata
+			[metadata]
+			name = your_package
+			version = attr: src.VERSION
+			license = file: license.txt
+
+			# optionsセクションではパッケージの依存関係やpip installした時の動作を定義する
+			# 値が複数ある場合、インデントすることで1行に1つの値を書くことができる。
+			# https://setuptools.readthedocs.io/en/latest/setuptools.html#options
+			[options]
+			install_requires =
+				packageA
+				packageB
+
+			# optionの内、値のTypeがsectionのものは別セクションで記述する。
+			[options.extras_require]
+			develop =
+				dev_packageA
+				dev_packageB
+
+			[options.entry_points]
+			console_scripts =
+				foo = package_name.module_name:func_name
+				foo_dev = package_name.module_name:func_name [develop]
+			gui_scripts =
+				bar = gui_package_name.gui_module_name:gui_func_name
+			```
+* [MANIFEST.inとは](https://qiita.com/airtoxin/items/2eafb930fa9b54ee7149)
+	* デフォルトだとPythonファイルしかパッケージに入れてくれないので、その他のファイルを入れるためには`MANIFEST.in`が必要となる.
+	* [MANIFEST.in を使ってソースコード配布物にファイルを含める](https://packaging.python.org/ja/latest/guides/using-manifest-in/)
+	* [ソースコード配布物を作成する](https://docs.python.org/ja/3/distutils/sourcedist.html)
+<br />
+
+## [プロジェクトのインストール](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/install.html)
+* プロジェクトをインストールするには下記コマンドを実行する.
+	```
+	pip install -e .
+	```
+	* このコマンドは、pipにカレントディレクトリからsetup.pyを見つけ出し、それを編集可能（editable）または開発（development）モードでインストールするように伝える.
+	* 編集可能モードは、ローカルのコードを変更した時に、プロジェクトの依存対象のような、プロジェクトに関するメタデータを変更した場合だけ再インストールが必要なようにする.
+<br />
+
 ## Reference
 * [Tutorial](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/tutorial/index.html)
