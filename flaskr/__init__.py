@@ -5,27 +5,27 @@ from flask import Flask
 def create_app(test_config=None):
     '''
     Flaskインスタンスの作成
-		__name__: 
-        この時点でのPythonのモジュール名. 
-        appはいくつかのpathを用意するので、appがどの場所にあるか知る必要があり、
-        __name__はそれを伝えるのに便利な方法.
+        __name__: 
+            この時点でのPythonのモジュール名. 
+            appはいくつかのpathを用意するので、appがどの場所にあるか知る必要があり、
+            __name__はそれを伝えるのに便利な方法.
         
         instance_relative_config=True:
-        設定ファイルの場所がインスタンスフォルダから相対的に示されることをappへ伝える.
-        インスタンスフォルダは、flaskrパッケージの外側に存在し、秘密情報の設定やデータベースのファイルなど、
-        バージョン管理へコミットするべきではないローカルのデータを保持することができる.
+            設定ファイルの場所がインスタンスフォルダから相対的に示されることをappへ伝える.
+            インスタンスフォルダは、flaskrパッケージの外側に存在し、秘密情報の設定やデータベースのファイルなど、
+            バージョン管理へコミットするべきではないローカルのデータを保持することができる.
     '''
     app = Flask(__name__, instance_relative_config=True)
     
     '''
     appが使用する標準設定の設定
-		SECRET_KEY:
-        データを安全に保つためにFlaskとFlask拡張によって使用される.
-        開発中は便利な値を提供するために、ここでは'dev'に設定されているが、
-        デプロイをする時には無作為な値（random value）で上書きするべきである.
+        SECRET_KEY:
+            データを安全に保つためにFlaskとFlask拡張によって使用される.
+            開発中は便利な値を提供するために、ここでは'dev'に設定されているが、
+            デプロイをする時には無作為な値（random value）で上書きするべきである.
         DATABASE:
-        SQLiteデータベースファイルが保存されるパス.
-        Flaskがインスタンスフォルダに選んだパスである app.instance_path の下になる.
+            SQLiteデータベースファイルが保存されるパス.
+            Flaskがインスタンスフォルダに選んだパスである app.instance_path の下になる.
     '''
     app.config.from_mapping(
         SECRET_KEY = 'dev',
@@ -35,14 +35,14 @@ def create_app(test_config=None):
     if test_config is None:
         '''
         config:
-        インスタンスフォルダに config.py が存在する場合、値をそのファイルから取り出して、
-        標準設定を上書きする.
-        デプロイの時には、本当のSECRET_KEYを設定するために使用できる.
+            インスタンスフォルダに config.py が存在する場合、値をそのファイルから取り出して、
+            標準設定を上書きする.
+            デプロイの時には、本当のSECRET_KEYを設定するために使用できる.
         
         silent:
-        デフォルトではFalseであり、Trueにすると、ファイルや環境変数が見つからなかった場合に、
-        例外を発生させるのではなく、Falseを返すようになる.
-        URL: https://www.subarunari.com/entry/2018/03/17/%E3%81%84%E3%81%BE%E3%81%95%E3%82%89%E3%81%AA%E3%81%8C%E3%82%89_Flask_%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B_%E3%80%9CConfiguration%E3%80%9C
+            デフォルトではFalseであり、Trueにすると、ファイルや環境変数が見つからなかった場合に、
+            例外を発生させるのではなく、Falseを返すようになる.
+            URL: https://www.subarunari.com/entry/2018/03/17/%E3%81%84%E3%81%BE%E3%81%95%E3%82%89%E3%81%AA%E3%81%8C%E3%82%89_Flask_%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B_%E3%80%9CConfiguration%E3%80%9C
         '''
         app.config.from_pyfile('config.py', silent=True)
     else:
