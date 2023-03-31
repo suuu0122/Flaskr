@@ -13,7 +13,7 @@
 			<header>
 				<div>
 					<h1>{{ post['title'] }}</h1>
-					<div class="about">by {{ post['usrname'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
+					<div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
 				</div>
 				<!-- ユーザが投稿記事の作者である場合は、その投稿記事にupdateのviewへリンクするEditが見える. -->
 				{% if g.user['id'] == post['author_id'] %}
