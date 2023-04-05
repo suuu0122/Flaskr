@@ -14,6 +14,7 @@
 * [プロジェクトをインストール可能にする](#can-install-project)
 * [プロジェクトのインストール](#install-project)
 * [テストの網羅率](#test)
+* [本番環境へのデプロイ](#deploy)
 * [Reference](#reference)
 <br />
 
@@ -558,6 +559,48 @@
 		```
 <br />
 
+<a id="deploy"></a>
+
+## 本番環境へのデプロイ
+* ビルドとインストール
+	* どこかへ自分のアプリケーションをデプロイしたい場合は、配布ファイルをビルドする.
+	* 現在の標準的なPythonの配布ファイルは、拡張子が`.whl`のwheel形式である.
+		```zsh
+		pip install wheel
+		```
+	* Pythonを使用して、`setup.py`を実行すると、ビルド関連のコマンドを行うコマンドラインツールになる. `bdist_wheel`コマンドは、wheel配布ファイルをビルドする.
+		```zsh
+		python setup.py bdist_wheel
+		```
+		* ビルドしたファイルは、`dist/flaskr-1.0.0-py3-none-any.whl`で見つけることができる.
+		* ファイル名は、{project name}-{version}-{python tag}-{abi tag}-{platform tag}という形式になる.
+	* ビルドしたwheelファイルを別のマシンにコピーし、仮想環境を準備し、pipを使用してそのファイルをインストールする.
+		```zsh
+		pip install flaskr-1.0.0-py3-none-any.whl
+		```
+	* 別のマシンでは、もう一度`init-db`を実行して、インスタンスフォルダにデータベースを作成する必要がある.
+		```zsh
+		flask --app flaskr init-db
+		```
+		* Flaskが編集可能モードではなく、インストールされていると検知した時は、Flaskはインスタンスフォルダにインストールされた場所とは別のディレクトリを使用する. それは、`venv/var/flaskr-instance`で見つけることができる.
+* 秘密鍵の設定
+	* チュートリアルの始めでは、SECRET_KEYへ標準設定の値を与えていたが、本番環境では規則性のないrandom byteへ変更するべきである. そうしないと、攻撃者が公開された`'dev'`に設定されているキーを使用してセッションのクッキーの変更や、その他の秘密鍵を使用したあらゆることをできるようになってしまう.
+	* randomな秘密鍵を出力するには以下のコマンドが使用できる.
+		```zsh
+		python -c 'import secrets; print(secrets.token_hex())'
+		```
+* 本番環境サーバでの実行
+	* 開発環境ではなく、公開されるようにFlaskを実行する時は、組み込みの開発サーバを使用（`flask run`）するべきではない.
+	* 開発サーバは、便利なようにWerkzeugによって提供されているが、効率性、安定性、セキュリティを特別意識して設計されてはいない.
+	* 公開する時は、本番環境の[WSGIサーバ](https://blog.hirokiky.org/entry/2018/09/30/183840)を使用する. 一例として、Waitressを使用するには、まずは仮想環境にインストールする.
+		```zsh
+		pip install waitress
+		```
+	* Waitressへ自分のアプリケーションについて伝える必要があるが、それは`flask run`のように`--app`を使用しない. Flaskアプリケーションのオブジェクトを取得するためには、application factoryをimportして呼び出すということをWaitressへ伝える必要がある.
+		```zsh
+		waitress-serve --call 'flaskr:create_app'
+		```
+	* [デプロイの詳細情報](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/deploying/index.html)
 <a id="reference"></a>
 
 ## Reference
